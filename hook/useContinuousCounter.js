@@ -1,23 +1,8 @@
 import { useState, useRef, useCallback } from "react";
 
-const useContinuousCounter = (initialValue) => {
+const useContinuousCounter = (max) => {
   const min = 0;
-  const [value, setValue] = useState(initialValue);
   const intervalRef = useRef(null);
-
-  const updateValue = (newValue) => {
-    setValue(newValue);
-  };
-
-  const handleOneClick = (type) => {
-    setValue((prevValue) => {
-      if (type === "decrement") {
-        return prevValue > min ? prevValue - 1 : min;
-      } else {
-        return prevValue + 1;
-      }
-    });
-  };
 
   const startContinuousChange = (type) => {
     intervalRef.current = setInterval(() => {
@@ -39,11 +24,8 @@ const useContinuousCounter = (initialValue) => {
   };
 
   return {
-    value,
-    handleOneClick,
     startContinuousChange,
     stopContinuousChange,
-    updateValue,
   };
 };
 
