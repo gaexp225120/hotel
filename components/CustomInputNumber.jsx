@@ -15,15 +15,17 @@ function CustomInputNumber({
   onBlur,
   disabled,
 }) {
+  // ref for interval
   const intervalRef = useRef(null);
+  // ref for timeout
   const timeoutRef = useRef(null);
+  // ref for current value
   const latestValueRef = useRef(value);
-  const isLongPress = useRef(false); // Flag to track if it's a long press
-
-  console.log("disabled", name, disabled);
+  // ref for check if it's long press
+  const isLongPress = useRef(false);
 
   const minDisabled = () => {
-    return value <= min;
+    return value === 0;
   };
 
   const maxDisabled = () => {
@@ -35,7 +37,7 @@ function CustomInputNumber({
 
   const handleClick = (type) => {
     if (!isLongPress.current) {
-      // If it's not a long press, handle single click
+      // if it's not a long press, go single click
       if (type === "decrement") {
         handleDecrement();
       } else {
@@ -45,11 +47,7 @@ function CustomInputNumber({
   };
 
   const handleIncrement = () => {
-    if (name.includes("child")) {
-      if (latestValueRef.current < max && adultNumber > 0) {
-        onChange({ target: { name, value: latestValueRef.current + step } });
-      }
-    } else if (latestValueRef.current < max) {
+    if (latestValueRef.current < max) {
       onChange({ target: { name, value: latestValueRef.current + step } });
     }
   };
@@ -69,8 +67,8 @@ function CustomInputNumber({
         } else {
           handleIncrement();
         }
-      }, 100); // Continuous change interval time
-    }, 500); // Initial delay before continuous change starts
+      }, 100); // continuous change interval time
+    }, 500); // initial delay before continuous change starts
   };
 
   const stopContinuousChange = () => {
@@ -95,7 +93,13 @@ function CustomInputNumber({
     onChange({ target: { name, value: inputValue } });
   };
 
-  // Update the latestValueRef whenever value changes
+  const handleBlur = () => {
+    if (onBlur) {
+      onBlur({ target: { name, value: latestValueRef.current.toString() } });
+    }
+  };
+
+  // update the latestValueRef whenever value changes
   React.useEffect(() => {
     latestValueRef.current = value;
   }, [value]);
@@ -108,6 +112,7 @@ function CustomInputNumber({
         onMouseUp={stopContinuousChange}
         onMouseLeave={stopContinuousChange}
         disabled={minDisabled()}
+        onBlur={handleBlur}
       >
         <Image
           src={minDisabled() ? "/minus-disabled.svg" : "/minus.svg"}
@@ -123,7 +128,9 @@ function CustomInputNumber({
         />
       </button>
       <input
-        className="w-12 h-12 p-2 border-gray-400 border-[3px] rounded-[6px] appearance-none"
+        className={`w-12 h-12 p-2 border-[3px] rounded-[6px] outline-none appearance-none text-[16px] ${
+          disabled ? "border-gray-400 cursor-not-allowed" : "border-gray-600 "
+        }`}
         type="number"
         name={name}
         value={value}
@@ -140,6 +147,7 @@ function CustomInputNumber({
         onMouseUp={stopContinuousChange}
         onMouseLeave={stopContinuousChange}
         disabled={maxDisabled()}
+        onBlur={handleBlur}
       >
         <Image
           src={maxDisabled() ? "/plus-disabled.svg" : "/plus.svg"}
