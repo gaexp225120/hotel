@@ -32,12 +32,11 @@ function CustomInputNumber({
     if (name.includes("child")) {
       if (adultNumber < 1) return true;
     }
-    return value >= max;
+    return value === max;
   };
 
   const handleClick = (type) => {
     if (!isLongPress.current) {
-      // if it's not a long press, go single click
       if (type === "decrement") {
         handleDecrement();
       } else {
@@ -67,8 +66,8 @@ function CustomInputNumber({
         } else {
           handleIncrement();
         }
-      }, 100); // continuous change interval time
-    }, 500); // initial delay before continuous change starts
+      }, 100);
+    }, 500);
   };
 
   const stopContinuousChange = () => {
@@ -99,7 +98,6 @@ function CustomInputNumber({
     }
   };
 
-  // update the latestValueRef whenever value changes
   React.useEffect(() => {
     latestValueRef.current = value;
   }, [value]);

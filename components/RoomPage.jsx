@@ -15,7 +15,6 @@ const rooms = [
 ];
 
 const RoomPage = () => {
-  // allocations store room list
   const [allocations, setAllocations] = useState([]);
   const [remainingGuests, setRemainingGuests] = useState({
     adult: guest.adult,

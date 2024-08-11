@@ -1,5 +1,6 @@
 import { ADULT, CHILD } from "../components/constants/constants";
 
+// get init room allocation
 export const getDefaultRoomAllocation = (guest, rooms) => {
   const totalAdults = guest.adult;
   const totalChildren = guest.child;
